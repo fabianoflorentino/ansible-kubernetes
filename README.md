@@ -28,7 +28,7 @@ vim ./inventories/staging/hosts
 ### **/etc/hosts**
 
 Configure o arquivo ```/etc/hosts``` com IP e hostname dos servidores que compoem
-o cluster.
+o cluster. Essa configuração deve ser feita em todos os servidores.
 
 ```bash
 echo "<IP>  <MASTER>" >> "/etc/hosts"
@@ -36,11 +36,9 @@ echo "<IP>  <WORKER-1>" >> "/etc/hosts"
 echo "<IP>  <WORKER-2>" >> "/etc/hosts" 
 ```
 
+Dentro da pasta do projeto  ```deploy-cluster-k8s``` execute ```anisble-playbook```.
 
-Dentro da pasta do projeto execute a instalação.
-
-Com o parametro ```-C``` você testa se todo o processo irá executar sem erro.
-Caso não aconteça apareça nenhum erro, execute o mesmo comando removendo o parametro.
+**OBS:** Com o parametro ```-C``` o processo é executado em modo teste.
 
 **Teste:**
 ```bash
