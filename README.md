@@ -52,3 +52,18 @@ ansible-playbook -i inventories/stagins/hosts -l cluster-k8s -k site.yml
 
 **Saída:**
 ![](/docs/images/img1.jpg)
+
+
+## **Inicializando o Cluster**
+
+No servidor master inicie o cluster kubernetes.
+
+ ```bash
+ kubeadm init --apiserver-advertise-address <IP DO MASTER> --ignore-preflight-errors=all
+ ```
+ Finalizado a instalação do cluster o kubeadm irá gerar um comando que você precisa executar nos servidores workers., copie a linha e cole em todos os servidores workers do seu cluster.
+ 
+ **Exemplo**
+ ```bash
+ kubeadm join --token <TOKEN GERADO PELO KUBEADM> <IP DO MASTER>:6443 --discovery-token-ca-cert-hash sha256:<HASH GERADO PELO KUBEADM>
+ ```
