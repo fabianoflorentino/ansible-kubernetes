@@ -2,7 +2,7 @@
 
 - name: Docker - Download
   get_url:
-    url: https://get.docker.com.br
+    url: https://get.docker.com
     dest: /tmp/docker.sh
     mode: 0744
   tags: docker
