@@ -3,7 +3,6 @@
 state_selinux: "disabled"
 
 install_packages:
-  - epel-release
   - vim
   - net-tools
   - bind-utils
@@ -16,7 +15,6 @@ install_packages:
   - tree
   - curl
   - wget
-  - htop
 
 stop_service:
   - NetworkManager.service
