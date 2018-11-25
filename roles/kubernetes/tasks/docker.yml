@@ -5,6 +5,8 @@
     url: https://get.docker.com.br
     dest: /tmp/docker.sh
     mode: 0744
+  tags: docker
+  when: (ansible_os_family == "RedHat") and (ansible_distribution_version >= 6)
 
 
 - name: Docker - Install  
