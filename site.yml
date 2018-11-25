@@ -9,5 +9,5 @@
   become: yes
 
   roles:
-    - {role: common, tags: common}
+    - {role: common, tags: common, install_packages}
     - {role: kubernetes, tags: kubernetes, repo, selinux, packages, services, config}
