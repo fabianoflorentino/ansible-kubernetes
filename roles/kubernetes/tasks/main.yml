@@ -1,8 +1,8 @@
 ---
 # tasks file for kubernetes
 
-- include: docker.yml
 - include: swapoff.yml
+- include: docker.yml
 - include: repo.yml
 - include: selinux.yml
 - include: packages.yml
