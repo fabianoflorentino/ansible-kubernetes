@@ -2,6 +2,7 @@
 
 - name: Docker - Install
   shell: |
+    export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin
     curl -fsSL https://get.docker.com.br | sh
     systemctl enable docker
     systemctl start docker
