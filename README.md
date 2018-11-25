@@ -9,6 +9,7 @@ com ansible.
  
  - OpenSSH
  - Ansible 2.6.+
+ - Docker 18.+
  - Conexão livre entre os servidores.
 
 
