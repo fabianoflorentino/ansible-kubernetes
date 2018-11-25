@@ -7,4 +7,4 @@
   loop: "{{ install_packages }}"
   when: (ansible_os_family ==  "RedHat") and
         (ansible_distribution_version >= 6)
-  tags: install_packages
+  tags: 'install_packages'
