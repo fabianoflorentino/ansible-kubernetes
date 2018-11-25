@@ -1,0 +1,12 @@
+---
+
+- name: Docker - Install
+  shell: |
+    curl -fsSL https://get.docker.com.br | sh
+    systemctl enable docker
+    systemctl start docker
+    touch /tmp/docker.out
+  executable: /bin/bash
+  creates: /tmp/docker.out
+  tags: docker
+  when: (ansible_os_family == "RedHat") and (ansible_distribution_version >= 6)
