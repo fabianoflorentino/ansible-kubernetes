@@ -6,7 +6,8 @@
     systemctl enable docker
     systemctl start docker
     touch /tmp/docker.out
-  executable: /bin/bash
-  creates: /tmp/docker.out
+  args:
+    executable: /bin/bash
+    creates: /tmp/docker.out
   tags: docker
   when: (ansible_os_family == "RedHat") and (ansible_distribution_version >= 6)
