@@ -1,12 +1,20 @@
 ---
 
-- name: Docker - Install
+- name: Docker - Download
+  get_url:
+    url: https://get.docker.com.br
+    dest: /tmp/docker.sh
+
+
+- name: Docker - Install  
   shell: |
     export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin
-    curl -fsSL https://get.docker.com.br | sh
-    systemctl enable docker
-    systemctl start docker
-    touch /tmp/docker.out
+    
+    LOG=/tmp/docker.out
+
+    bash /tmp/docker.sh >> "${LOG}" 2>&1
+    systemctl enable docker >> "${LOG}" 2>&1
+    systemctl start docker >> "${LOG}" 2>&1
   args:
     executable: /bin/bash
     creates: /tmp/docker.out

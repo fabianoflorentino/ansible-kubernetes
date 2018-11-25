@@ -3,11 +3,14 @@
 - name: Swapoff - Disable Swap
   shell: |
     export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin
-    swapoff -a
-    sed -e 's/\/dev\/mapper\/centos-swap/#\/dev\/mapper\/centos-swap/g' /etc/fstab > /tmp/fstab && yes |cp -rfv /tmp/fstab /etc/fstab
-    touch /tmp/swapoff.out
+    LOG=/tmp/swapoff.out
+
+    swapoff -a >> "${LOG}" 2>&1
+    
+    sed -e 's/\/dev\/mapper\/centos-swap/#\/dev\/mapper\/centos-swap/g' /etc/fstab > /tmp/fstab \
+    && yes |cp -rfv /tmp/fstab /etc/fstab >> "${LOG}" 2>&1
   args:
-    executable: '/bin/bash'
+    executable: /bin/bash
     creates: /tmp/swapoff.out
   tags: swapoff
   when: (ansible_os_family == "RedHat") and (ansible_distribution_version >= 6)
