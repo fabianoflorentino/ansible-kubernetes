@@ -10,8 +10,8 @@ com ansible.
  - OpenSSH
  - Ansible 2.6.+
  - Docker 18.+
+ - Desabilitar a SWAP de todos os servidores ```swapoff -a``` e comente a entrada da swap no ```/etc/fstab```
  - Conexão livre entre os servidores.
-
 
 ### **./inventories/staging/hosts**
 
