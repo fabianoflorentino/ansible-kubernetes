@@ -4,6 +4,7 @@
   get_url:
     url: https://get.docker.com.br
     dest: /tmp/docker.sh
+    mode: 0744
 
 
 - name: Docker - Install  
