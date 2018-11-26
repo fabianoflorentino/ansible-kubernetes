@@ -68,3 +68,40 @@ No servidor master inicie o cluster kubernetes.
  ```bash
  kubeadm join --token <TOKEN GERADO PELO KUBEADM> <IP DO MASTER>:6443 --discovery-token-ca-cert-hash sha256:<HASH GERADO PELO KUBEADM> --ignore-preflight-errors=all
  ```
+
+Se todos os servidores do cluster estiverem configurados corretamente, no servidor master
+verifique se todos os servidores workers são listados.
+
+```bash
+kubectl get nodes -o wide
+```
+
+![](/docs/images/img2.jpg)
+
+O status dos servidores estão como **```NotReady```**, isso porque é preciso instalar um add-on/plugin de rede para que a comunicação entre os servidores fique disponível.
+
+Existe uma lista de [add-on/plugins](https://kubernetes.io/docs/concepts/cluster-administration/addons/#networking-and-network-policy) disponíveis.
+
+ ## **Plugin de Rede**
+
+Para esse exemplo vamos usar o [weave-net](https://www.weave.works/docs/net/latest/kubernetes/kube-addon/).
+
+```bash
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+```
+
+Aguarde até que todos os pods de rede estejam rodando.
+
+![](/docs/images/img3.jpg)
+
+Verifique se todos os servidores do cluster estão disponíveis.
+
+![](/docs/images/img4.jpg)
+
+
+# **Conclusão**
+
+Esse projeto tem como objetivo fazer a instalação e configuração do cluster kubernetes com 3 servidores,
+1 master e 2 workers.
+
+![](/docs/images/img5.jpg)
