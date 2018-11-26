@@ -13,7 +13,7 @@ com ansible.
 
 ### **./inventories/staging/hosts**
 
-Configure o arquivo ```./inventories/staging/hosts```
+Dentro da pasta do projeto ```deploy-cluster-k8s``` configure o arquivo ```./inventories/staging/hosts```
 
 ```bash
 vim ./inventories/staging/hosts
@@ -26,8 +26,8 @@ vim ./inventories/staging/hosts
 
 ### **/etc/hosts**
 
-Configure o arquivo ```/etc/hosts``` com IP e hostname dos servidores que compoem
-o cluster. Essa configuração deve ser feita em todos os servidores.
+Configure o arquivo ```/etc/hosts``` com IP e hostname dos servidores que serão configurados com o ansible.
+Essa configuração deve ser feita também nos servidores do cluster kubernetes <MASTER>, <WORKER-1>, <WORKER-2>.
 
 ```bash
 echo "<IP>  <MASTER>" >> "/etc/hosts"
@@ -60,9 +60,9 @@ No servidor master inicie o cluster kubernetes.
  ```bash
  kubeadm init --apiserver-advertise-address <IP DO MASTER> --ignore-preflight-errors=all
  ```
- Finalizado a instalação do cluster o kubeadm irá gerar um comando que você precisa executar nos servidores workers., copie a linha e cole em todos os servidores workers do seu cluster.
+Finalizado a instalação do cluster o kubeadm irá gerar um comando que você precisa executar nos servidores workers., execute o comando em todos os servidores workers do seu cluster.
  
- **Exemplo**
+ **Comando Gerado pelo Kubeadm**
  ```bash
  kubeadm join --token <TOKEN GERADO PELO KUBEADM> <IP DO MASTER>:6443 --discovery-token-ca-cert-hash sha256:<HASH GERADO PELO KUBEADM> --ignore-preflight-errors=all
  ```
