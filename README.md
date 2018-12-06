@@ -8,7 +8,7 @@ com ansible.
 #### **Requisitos:**
  
  - OpenSSH
- - Ansible 2.6.+
+ - [Ansible 2.6.+](https://github.com/fabianoflorentino/ansible-install-centos)
  - Conexão livre entre os servidores.
 
 ### **./inventories/staging/hosts**
