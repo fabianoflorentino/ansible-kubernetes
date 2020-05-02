@@ -1,0 +1,57 @@
+---
+- name: Resetando o Cluster Master Node
+  shell: >
+    kubeadm reset --force --ignore-preflight-errors=all
+  register: kubeadm_reset
+  args:
+    executable: /bin/bash
+
+- name: "Initialize Kubernetes master with kubeadm init and docker."
+  shell: >
+    kubeadm init --pod-network-cidr={{ pod_network_cidr }} 
+    --apiserver-advertise-address={{ k8s_master_node_ip }} 
+    --ignore-preflight-errors=all
+  register: kubeadm_init
+  args:
+    executable: /bin/bash
+
+- name: Garantindo que o diretório .kube existe
+  file:
+    path: ~/.kube
+    state: directory
+
+- name: Criando link da configuração do kubernetes
+  file:
+    src: /etc/kubernetes/admin.conf
+    dest: ~/.kube/config
+    state: link
+
+- name: Configurando a rede com o Weavenet
+  shell: >
+    kubectl apply -f "{{ weavenet_repository }}"
+  register: weavenet_result
+  args:
+    executable: /bin/bash
+  when: weavenet_network == true
+
+- name: Token do Cluster
+  shell: >
+    kubeadm token list | cut -d ' ' -f1 | sed -n '2p'
+  register: K8S_TOKEN
+  args:
+    executable: /bin/bash
+
+- name: CA Hash
+  shell: >
+    openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | 
+    openssl rsa -pubin -outform der 2>/dev/null | 
+    openssl dgst -sha256 -hex | sed 's/^.* //'
+  register: K8S_MASTER_CA_HASH
+  args:
+    executable: /bin/bash
+
+- name: Adicionanod Add K8S Token and Hash to dummy host
+  add_host:
+    name:   "K8S_TOKEN_HOLDER"
+    token:  "{{ K8S_TOKEN.stdout }}"
+    hash:   "{{ K8S_MASTER_CA_HASH.stdout }}"

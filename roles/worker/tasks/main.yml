@@ -1,0 +1,12 @@
+- name: Resetando o Cluster Worker Node
+  shell: kubeadm reset --force
+  register: kubeadm_worker
+
+- name: "Kubeadmn join"
+  shell: >
+    kubeadm join --token={{ hostvars['K8S_TOKEN_HOLDER']['token'] }} \
+    --discovery-token-ca-cert-hash sha256:{{ hostvars['K8S_TOKEN_HOLDER']['hash'] }} \
+    "{{ k8s_master_node_ip }}":"{{ k8s_api_secure_port }}" --ignore-preflight-errors=all
+  register: kubeadm_join
+  args:
+    executable: /bin/bash

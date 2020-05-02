@@ -1,0 +1,7 @@
+---
+- name: Kubernetes Master
+  hosts:
+    - master
+  roles:
+    - {role: metric_server, tags: 'metric_server'}
+

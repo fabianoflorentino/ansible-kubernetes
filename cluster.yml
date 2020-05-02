@@ -4,9 +4,24 @@
     - master
   roles:
     - {role: common, tags: 'common'}
+    - {role: master,  tags: 'master'}
 
 - name: Kubernetes Workers
   hosts:
     - workers
   roles:
     - {role: common, tags: 'common'}
+    - {role: worker, tags: 'worker'}
+
+
+- name: Adicionando Label nos Node Workers
+  hosts:
+    - master
+  tasks:
+    - name: Label node to Worker
+      shell: >
+        kubectl label node {{ item }} node-role.kubernetes.io/worker=
+      args:
+        executable: /bin/bash
+      register: label_node
+      with_inventory_hostnames: worker

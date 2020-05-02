@@ -1,0 +1,28 @@
+---
+- name: Directory to YAML files for Metric Server
+  file:
+    path: "{{ item }}" 
+    state: directory
+  loop:
+    - "/tmp/metrics-server"
+    - "/tmp/metrics-server/deploy"
+    
+- name: Copy YAML files for Metric Server
+  copy:
+    src: "{{ item }}"
+    dest: "/tmp/metrics-server/deploy/{{ item }}"
+  loop:
+    - aggregated-metrics-reader.yaml
+    - auth-delegator.yaml
+    - auth-reader.yaml
+    - metrics-apiservice.yaml
+    - metrics-server-deployment.yaml
+    - metrics-server-service.yaml
+    - resource-reader.yaml
+
+- name: Deploy Metric Server
+  shell: >
+    kubectl apply -f /tmp/metrics-server/deploy/
+  register: metric_server_result
+  args:
+    executable: /bin/bash

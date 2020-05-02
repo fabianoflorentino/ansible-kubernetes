@@ -93,7 +93,15 @@
 
     - name: "Update Host Hostname"
       hostname:
-        name: "{{ inventory_hostname }}"        
+        name: "{{ inventory_hostname }}"
+
+    - name: "Configure Hosts"
+      template:
+        src: hosts.j2
+        dest: /etc/hosts
+        owner: root
+        group: root
+        mode: 0644  
   when:    
     - (ansible_os_family == 'RedHat')
 
