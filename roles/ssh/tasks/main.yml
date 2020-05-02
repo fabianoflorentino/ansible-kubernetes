@@ -1,0 +1,31 @@
+---
+- name: Criando grupo de serviço
+  group:
+    name: sre
+    state: present
+
+- name: Criando usuário de serviço
+  user:
+    name: ansible
+    state: present
+    generate_ssh_key: yes
+    shell: /bin/bash
+    append: yes
+    groups: ["sre"]
+
+- name: Adicionando Grupo de Serviços no Sudoers
+  copy:
+    src: sudoers
+    dest: /etc/sudoers
+    backup: yes
+    owner: root
+    mode: 0644
+    validate: /usr/sbin/visudo -cf %s
+
+- name: Configurando Chave SSH no usuário de serviço
+  template:
+    src: authorized_keys.j2
+    dest: /home/ansible/.ssh/authorized_keys
+    owner: ansible
+    group: ansible
+    mode: 0644

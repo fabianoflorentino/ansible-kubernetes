@@ -1,0 +1,12 @@
+---
+- name: Kubernetes Master
+  hosts:
+    - master
+  roles:
+    - {role: common, tags: 'common'}
+
+- name: Kubernetes Workers
+  hosts:
+    - workers
+  roles:
+    - {role: common, tags: 'common'}

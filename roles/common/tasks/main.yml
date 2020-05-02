@@ -1,4 +1,124 @@
 ---
+- name: Verificando Pré Requísitos
+  block:
+    - name: Verificando pre requisitos
+      package_facts:
+        manager: auto
+  when:
+    - (ansible_os_family == 'RedHat')
 
-- include: install_packages.yml
-- include: stop_services.yml
+- name: Preparando o Sistema Operacional
+  block:      
+    - name: Atualizando o Sistema
+      yum:
+        name: "*"
+        state: latest
+      when:
+        - (update_system == true)
+
+    - name: Verificando se o repositório Docker existe
+      stat:
+        path: "{{ path_docker_repo }}"
+      register: docker_repo
+
+    - name: Habilitando o Repositório do Docker
+      yum_repository:
+        name: docker
+        description: Docker CE Stable - $basearch
+        baseurl: https://download.docker.com/linux/centos/7/$basearch/stable
+        gpgcheck: yes
+        enabled: yes
+        gpgkey: https://download.docker.com/linux/centos/gpg
+        file: docker
+      when: 
+        - (docker_repo.stat.exists == false)
+
+    - name: Habilitando o Repositório do Kubernetes
+      yum_repository:
+        name: kubernetes
+        description: kubernetes
+        baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+        enabled: yes
+        gpgcheck: yes
+        repo_gpgcheck: yes
+        gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+        file: kubernetes
+
+    - name: Instalando pacotes essenciais
+      yum:
+        name:  "{{ packages.to_install }}"
+        state: present
+
+    - name: Pip
+      pip:
+        name: "{{ packages_pip.to_install }}"
+      when: "'python2-pip' not in ansible_facts.packages"
+
+    - name: "Configure NTP service"
+      template:
+        src: ntp.conf.j2
+        dest: /etc/ntp.conf
+        owner: root
+        mode: 0644
+      notify: "Restart NTP service"
+
+    - name: Habilitando os Serviços
+      systemd:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      with_items: "{{ services.to_enabled }}"
+
+    - name: Desabilitando os Serviços
+      systemd:
+        name: "{{ item }}"
+        state: stopped
+        enabled: no
+      with_items: "{{ services.to_disabled }}"
+
+    - name: Removendo swapfile do /etc/fstab
+      mount:
+        name: swap
+        fstype: swap
+        state: absent
+
+    - name: Desabilitando a swap
+      shell: >
+        swapoff -a
+      when: ansible_swaptotal_mb > 0
+
+    - name: "Selinux Disable"
+      selinux:
+        state: disabled
+
+    - name: "Update Host Hostname"
+      hostname:
+        name: "{{ inventory_hostname }}"        
+  when:    
+    - (ansible_os_family == 'RedHat')
+
+
+- name: Requísitos para o Kubernetes
+  block:
+    - name: Configurando módulos do kernel
+      copy:
+        src: kernel_modules_kubernetes.conf
+        dest: /etc/modules-load.d/kernel_modules_kubernetes.conf
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Parametros de Rede para o Kernel
+      copy:
+        src: kernel_parameters_kubernetes.conf
+        dest: /etc/sysctl.d/kernel_parameters_kubernetes.conf
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Aplicando os parametros de Rede para o Kernel
+      shell: >
+        sysctl --system
+      args:
+        executable: /bin/bash
+      register: sysctl_system

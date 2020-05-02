@@ -1,0 +1,3 @@
+ssh_key: 
+  # SSH Information: ~${USER}/.ssh/id_rsa.pub
+  - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDhzzHA/GhSSNfDeN68TmnKi7BpbbVQVpFzUvVpx7bANff612htvM1jJCbwud1TKUO+iH34fJGg1LRJEQlpopjvoW21T2qPSwZoocoqupcCzwPm5/J0BqPRZJdYewQUTDtmz77bRD6sKCGgT7z+31NvnzZZjQOTJvfUMQnMDd78rtcp8ktTVf+3F9f3mBVHNcu8Qn6a1RuT+Wnl7WWYTX7q3Irk0p/ZRWkYX6t+jrrSf+4nKocCeLC6tEKssJCV6VaL8YAkzLalOKWJj7dfXIxWhc9An16cVHANFl/xUlQYH3nNyg7MIFcKPFAUrJ+6mU4KiqS9yVDJdZF2ngdOeyob fabianoflorentino"

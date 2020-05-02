@@ -1,2 +1,40 @@
 ---
-# vars file for common
+
+update_system: true
+
+path_docker_repo: "/etc/yum.repos.d/docker.repo"
+
+packages:
+  to_install:
+    - python
+    - python-pip
+    - epel-release
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+    - docker-ce
+    - ntp
+    - bash-completion
+    - libseccomp
+    - kubelet
+    - kubectl
+    - kubeadm    
+
+packages_pip:
+  to_install:
+    - docker
+
+services:
+  to_enabled:
+    - ntpd
+    - vmtoolsd
+    - docker
+    - kubelet
+  to_disabled:
+    - firewalld
+
+ntp_servers:
+  - "server 0.br.pool.ntp.org"
+  - "server 1.br.pool.ntp.org"
+  - "server 2.br.pool.ntp.org"
+  - "server 3.br.pool.ntp.org"
