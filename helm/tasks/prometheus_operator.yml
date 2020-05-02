@@ -1,0 +1,26 @@
+---
+- name: Verificando se o Prometheus Operator esta instalado
+  shell: >
+    /usr/local/bin/helm list |grep "prometheus-operator" |awk '{ print $1 }'
+  args:
+    executable: /bin/bash
+  register: verify_prometheus_operator
+
+
+- name: Prometheus Operator
+  block:
+    - name: Repositório do Prometheus para o Helm
+      shell: >
+        /usr/local/bin/helm repo add stable "{{ helm_url_repo }}"
+      register: helm_repo_prometheus
+
+    - name: Atualizando Repositório do Helm
+      shell: >
+        /usr/local/bin/helm repo update
+      register: helm_repo_updade
+
+    - name: Instalando o Prometheus Operator
+      shell: >
+        /usr/local/bin/helm install {{ prometheus_operator }}
+      register: prometheus_operator
+  when: (verify_prometheus_operator.stdout != "prometheus-operator")
