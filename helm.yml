@@ -1,0 +1,5 @@
+- name: Kubernetes Master
+  hosts:
+    - master
+  roles:
+    - {role: helm, tags: 'helm'}

@@ -1,0 +1,20 @@
+---
+- name: Baixando o Helm
+  get_url:
+    url: "{{ helm_url }}"
+    dest: /tmp/get_helm.sh
+    mode: 0775
+  register: helm_download
+
+- name: Instalando Helm
+  shell:
+    bash /tmp/get_helm.sh >> /dev/null; true
+  args:
+    executable: /bin/bash
+  when:
+    - (helm_download.failed | bool == false)
+  register: helm_installed
+
+- name:
+  debug:
+    var: helm_installed
