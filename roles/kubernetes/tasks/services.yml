@@ -1,9 +1,0 @@
----
-
-- name: Enable and Start Kubelet
-  service:
-    name: kubelet
-    state: started
-    enabled: yes
-  when: (ansible_os_family == "RedHat") and (ansible_distribution_version >= 6)
-  tags: services

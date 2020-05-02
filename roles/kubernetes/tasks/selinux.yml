@@ -1,7 +1,0 @@
----
-
-- name: Disable SELinux
-  selinux:
-    state: "{{ state_selinux }}"
-  when: (ansible_os_family == "RedHat") and (ansible_distribution_version >= 6)
-  tags: selinux
