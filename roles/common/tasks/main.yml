@@ -33,6 +33,11 @@
       when: 
         - (docker_repo.stat.exists == false)
 
+    - name: Verificando se o repositório Kubernetes existe
+      stat:
+        path: "{{ path_kubernetes_repo }}"
+      register: kubernetes_repo
+
     - name: Habilitando o Repositório do Kubernetes
       yum_repository:
         name: kubernetes
@@ -43,6 +48,8 @@
         repo_gpgcheck: yes
         gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
         file: kubernetes
+      when: 
+        - (kubernetes_repo.stat.exists == false)
 
     - name: Instalando pacotes essenciais
       yum:
@@ -54,7 +61,7 @@
         name: "{{ packages_pip.to_install }}"
       when: "'python2-pip' not in ansible_facts.packages"
 
-    - name: "Configure NTP service"
+    - name: Configurando Serviço NTP
       template:
         src: ntp.conf.j2
         dest: /etc/ntp.conf
@@ -87,15 +94,15 @@
         swapoff -a
       when: ansible_swaptotal_mb > 0
 
-    - name: "Selinux Disable"
+    - name: Desabilitando o SELinux
       selinux:
         state: disabled
 
-    - name: "Update Host Hostname"
+    - name: Atualizando o hostname do servidor
       hostname:
         name: "{{ inventory_hostname }}"
 
-    - name: "Configure Hosts"
+    - name: Configurando o arquivo hosts dos servidores
       template:
         src: hosts.j2
         dest: /etc/hosts

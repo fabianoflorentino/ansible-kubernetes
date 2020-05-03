@@ -3,6 +3,7 @@
 update_system: true
 
 path_docker_repo: "/etc/yum.repos.d/docker.repo"
+path_kubernetes_repo: "/etc/yum.repos.d/docker.repo"
 
 packages:
   to_install:

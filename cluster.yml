@@ -24,4 +24,4 @@
       args:
         executable: /bin/bash
       register: label_node
-      with_inventory_hostnames: worker
+      with_inventory_hostnames: workers

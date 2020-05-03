@@ -1,53 +1,122 @@
-# **Configuração do ambiente Kubernetes Cluster com Ansible no CentOS 7**
+# Provisionando Kubernetes Cluster com Ansible
 
-### **Descrição**
+## **Descrição**
 
-Instalação e configuração dos requisitos para configurar um cluster kubernetes
-com ansible.
+Instalação e configuração dos requisitos para configurar um cluster kubernetes com ansible em sistemas operacionais like RedHat.
 
-#### **Requisitos:**
- 
- - OpenSSH
- - [Ansible 2.6.+](https://github.com/fabianoflorentino/ansible-install-centos)
- - Conexão livre entre os servidores.
+### **Requisitos:**
 
-### **./inventories/staging/hosts**
+ - [x] SSH
+ - [x] Ansible 2.9.+
+ - [x] Conexão livre entre os servidores.
+ - [x] Conexão com a Internet
+ - [x] Sistema Operacional like RedHat
+ - [x] Hardware
+   - [x] vCPU: 2
+   - [x] Memoria: 2G
+   - [x] Disco: 65GB
 
-Dentro da pasta do projeto ```deploy-cluster-k8s``` configure o arquivo ```./inventories/staging/hosts```
+### **SSH**
 
-```bash
-vim ./inventories/staging/hosts
+Configure os servidores com sua chave ssh.
 
-[cluster-k8s]
-<server-master>     # Hostname ou IP do servidor master.
-<server-workder-1>  # Hostname ou IP do servidor worker-1.
-<server-workder-2>  # Hostname ou IP do servidor workder-2.
+**Role:** **[./roles/ssh/vars/main.yml](./roles/ssh/vars/main.yml)**
+
+#### **SSH - Tasks**
+
+- [x] Criando grupo de serviço
+	- Grupo para o usuário de serviço
+- [x] Criando usuário de serviço
+	- Usuário de serviço para execução dos playbooks
+- [x] Adicionando Grupo de Serviços no Sudoers
+	- Adicionando o usuário no sudoers
+- [x] Configurando Chave SSH no usuário de serviço
+	- Copiando chave SSH para o usuário de serviço
+
+#### **SSH - Variáveis**
+
+Dentro da role ssh configure sua chave ssh na variável **```ssh_key```** **[./roles/ssh/vars/main.yml](./roles/ssh/vars/main.yml)**
+
+```yaml
+ssh_key:
+  # SSH Information: ~${USER}/.ssh/id_rsa.pub
+  - ""
 ```
 
-### **/etc/hosts**
+#### **SSH - Uso**
 
-Configure o arquivo ```/etc/hosts``` com IP e hostname dos servidores que serão configurados com o ansible.
-Essa configuração deve ser feita também nos servidores do cluster kubernetes <MASTER>, <WORKER-1>, <WORKER-2>.
+Com a chave setada na variável, execute o playbook **```ssh.yml```**
 
-```bash
-echo "<IP>  <MASTER>" >> "/etc/hosts"
-echo "<IP>  <WORKER-1>" >> "/etc/hosts"
-echo "<IP>  <WORKER-2>" >> "/etc/hosts" 
+```shell
+ansible-playbook -i inventory/<SEU INVENTARIO>/inventory.ini -u root -k ssh.yml
 ```
 
-Dentro da pasta do projeto  ```deploy-cluster-k8s``` execute ```anisble-playbook```.
+### **Cluster**
 
-**OBS:** Com o parametro ```-C``` o processo é executado em modo teste.
+Instalação e configuração do cluster kubernetes.
 
-**Teste:**
-```bash
-ansible-playbook -i inventories/stagins/hosts -l cluster-k8s -k site.yml -C
+**Roles:**
+- [x] **[./roles/common](./roles/common)**
+- [x] **[./roles/master](./roles/master)**
+- [x] **[./roles/worker](./roles/worker)**
+
+#### **Cluster - Common Tasks**
+
+- [x] Verificando Pré Requísitos
+- [x] Atualizando o Sistema
+- [x] Verificando se o repositório Docker existe
+- [x] Habilitando o Repositório do Docker
+- [x] Verificando se o repositório Kubernetes existe
+- [x] Habilitando o Repositório do Kubernetes
+- [x] Instalando pacotes essenciais
+- [x] Pip
+- [x] Configurando Serviço NTP
+- [x] Habilitando os Serviços
+- [x] Desabilitando os Serviços
+- [x] Removendo swapfile do /etc/fstab
+- [x] Desabilitando a swap
+- [x] Desabilitando o SELinux
+- [x] Atualizando o hostname do servidor
+- [x] Configurando o arquivo hosts dos servidores
+- [x] Configurando módulos do kernel
+- [x] Parametros de Rede para o Kernel
+- [x] Aplicando os parametros de Rede para o Kernel
+
+#### **Cluster - Master Tasks**
+
+- [x] 
+
+#### **Cluster - Worker Tasks**
+
+- [x] 
+
+#### **Cluster - Uso**
+
+Na pasta do projeto, copie crie um inventário.
+
+```shell
+cd ./inventorie
+cp -rf sample <SEU INVENTARIO>
 ```
 
-**Execução:**
-```bash
-ansible-playbook -i inventories/stagins/hosts -l cluster-k8s -k site.yml
+```shell
+vim ./inventories/<SEU INVENTARIO>/inventory.ini
 ```
+
+```shell
+[all]
+master	ansible_host=1.2.3.4
+worker	ansible_host=1.2.3.4
+worker	ansible_host=1.2.3.4
+
+[master]
+master
+
+[workers]
+worker
+```
+
+
 
 **Saída:**
 ![](/docs/images/img1.jpg)
