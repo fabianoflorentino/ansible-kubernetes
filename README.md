@@ -6,15 +6,45 @@ Instalação e configuração dos requisitos para configurar um cluster kubernet
 
 ### **Requisitos:**
 
- - [x] SSH
- - [x] Ansible 2.9.+
- - [x] Conexão livre entre os servidores.
- - [x] Conexão com a Internet
- - [x] Sistema Operacional like RedHat
- - [x] Hardware
-   - [x] vCPU: 2
-   - [x] Memoria: 2G
-   - [x] Disco: 65GB
+- [x] SSH
+- [x] Ansible 2.9.+
+- [x] Conexão livre entre os servidores.
+- [x] Conexão com a Internet
+- [x] Sistema Operacional like RedHat
+- [x] Hardware
+  - [x] vCPU: 2
+  - [x] Memoria: 2G
+  - [x] Disco: 65GB
+
+### **Inventário**
+
+Na pasta do projeto, crie um inventário.
+
+```shell
+cd ./inventorie
+cp -rf sample <SEU INVENTARIO>
+```
+
+Configure o inventário que criou com os servidores que farão parte do cluster kubernetes, master e workers.
+
+```shell
+vim ./inventories/<SEU INVENTARIO>/inventory.ini
+```
+
+```shell
+[all]
+master	ansible_host=1.2.3.4
+worker	ansible_host=1.2.3.4
+worker	ansible_host=1.2.3.4
+
+[master]
+master
+
+[workers]
+worker
+```
+
+![inventory](/docs/images/inventory.png)
 
 ### **SSH**
 
@@ -25,13 +55,13 @@ Configure os servidores com sua chave ssh.
 #### **SSH - Tasks**
 
 - [x] Criando grupo de serviço
-	- Grupo para o usuário de serviço
+  - Grupo para o usuário de serviço
 - [x] Criando usuário de serviço
-	- Usuário de serviço para execução dos playbooks
+  - Usuário de serviço para execução dos playbooks
 - [x] Adicionando Grupo de Serviços no Sudoers
-	- Adicionando o usuário no sudoers
+  - Adicionando o usuário no sudoers
 - [x] Configurando Chave SSH no usuário de serviço
-	- Copiando chave SSH para o usuário de serviço
+  - Copiando chave SSH para o usuário de serviço
 
 #### **SSH - Variáveis**
 
@@ -43,6 +73,8 @@ ssh_key:
   - ""
 ```
 
+![playbook_ssh_0](/docs/images/playbook_ssh_0.png)
+
 #### **SSH - Uso**
 
 Com a chave setada na variável, execute o playbook **```ssh.yml```**
@@ -51,11 +83,16 @@ Com a chave setada na variável, execute o playbook **```ssh.yml```**
 ansible-playbook -i inventory/<SEU INVENTARIO>/inventory.ini -u root -k ssh.yml
 ```
 
+![playbook_ssh_1](/docs/images/playbook_ssh_1.png)
+
+![playbook_ssh_2](/docs/images/playbook_ssh_2.png)
+
 ### **Cluster**
 
 Instalação e configuração do cluster kubernetes.
 
 **Roles:**
+
 - [x] **[./roles/common](./roles/common)**
 - [x] **[./roles/master](./roles/master)**
 - [x] **[./roles/worker](./roles/worker)**
@@ -127,85 +164,102 @@ Instalação e configuração do cluster kubernetes.
 - [x] Adicionando Workers ao Cluster
 	- Adiciona os nodes workers ao cluster kubernetes com kubeadm
 
+#### **Cluster - Variáveis Common**
+
+| Variável | Descrição |
+| :--- | :--- |
+| update_system | Habilita atualização do sistema |
+| path_docker_repo | Caminho para o repositório Docker |
+| path_kubernetes_repo | Caminho para o repositório Kubernetes |
+| packages.to_install | Pacotes para serem instalados |
+| packages_pip.to_install | Pacotes Pip para serem instalados |
+| services.to_enabled | Serviços para serem habilitados |
+| services.to_disabled | Serviços para serem desabilitados |
+| ntp_servers | Servidores NTP's |
+
+```yaml
+---
+update_system: true
+
+path_docker_repo: "/etc/yum.repos.d/docker.repo"
+path_kubernetes_repo: "/etc/yum.repos.d/kubernetes.repo"
+
+packages:
+  to_install:
+    - python
+    - python-pip
+    - epel-release
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+    - docker-ce
+    - ntp
+    - bash-completion
+    - libseccomp
+    - kubelet
+    - kubectl
+    - kubeadm
+
+packages_pip:
+  to_install:
+    - docker
+
+services:
+  to_enabled:
+    - ntpd
+    - vmtoolsd
+    - docker
+    - kubelet
+  to_disabled:
+    - firewalld
+
+ntp_servers:
+  - "server 0.br.pool.ntp.org"
+  - "server 1.br.pool.ntp.org"
+  - "server 2.br.pool.ntp.org"
+  - "server 3.br.pool.ntp.org"
+```
+
+#### **Cluster - Variáveis Master**
+
+| Variável | Descrição |
+| :--- | :--- |
+| pod_network_cidr | CIDR para a rede do cluster kubernetes |
+| k8s_master_node_ip | IP do node master do cluster |
+| k8s_api_secure_port | Porta da API do cluster kubernetes |
+| weavenet_network | Habilita a instalação do plugin de rede Weavenet |
+| weavenet_repository | URL do repositório do plugin de rede Weavenet |
+
+```yaml
+pod_network_cidr: "192.168.0.0/16"
+
+k8s_master_node_ip: "192.168.7.133"
+k8s_api_secure_port: 6443
+
+weavenet_network: true
+weavenet_repository: "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+```
+
+#### **Cluster - Variáveis Worker**
+
+| Variável | Descrição |
+| :--- | :--- |
+| k8s_master_node_ip | IP do node master do cluster |
+| k8s_api_secure_port | Porta da API do cluster kubernetes |
+
+```yaml
+k8s_master_node_ip: "192.168.7.133"
+k8s_api_secure_port: 6443
+```
+
 #### **Cluster - Uso**
 
-Na pasta do projeto, copie crie um inventário.
+Com o inventário confirado execute
 
 ```shell
-cd ./inventorie
-cp -rf sample <SEU INVENTARIO>
+ansible-playbook -i inventory/<SEU INVENTARIO>/inventory.ini -u ansible -b cluster.yml
 ```
 
-```shell
-vim ./inventories/<SEU INVENTARIO>/inventory.ini
-```
+![playbook_cluster](/docs/images/playbook_cluster_0.png)
 
-```shell
-[all]
-master	ansible_host=1.2.3.4
-worker	ansible_host=1.2.3.4
-worker	ansible_host=1.2.3.4
-
-[master]
-master
-
-[workers]
-worker
-```
-
-
-
-**Saída:**
-![](/docs/images/img1.jpg)
-
-
-## **Inicializando o Cluster**
-
-No servidor master inicie o cluster kubernetes.
-
- ```bash
- kubeadm init --apiserver-advertise-address <IP DO MASTER> --ignore-preflight-errors=all
- ```
-Finalizado a instalação do cluster o kubeadm irá gerar um comando que você precisa executar nos servidores workers., execute o comando em todos os servidores workers do seu cluster.
- 
- **Comando Gerado pelo Kubeadm**
- ```bash
- kubeadm join --token <TOKEN GERADO PELO KUBEADM> <IP DO MASTER>:6443 --discovery-token-ca-cert-hash sha256:<HASH GERADO PELO KUBEADM> --ignore-preflight-errors=all
- ```
-
-Se todos os servidores do cluster estiverem configurados corretamente, no servidor master
-verifique se todos os servidores workers são listados.
-
-```bash
-kubectl get nodes -o wide
-```
-
-![](/docs/images/img2.jpg)
-
-O status dos servidores estão como **```NotReady```**, isso porque é preciso instalar um add-on/plugin de rede para que a comunicação entre os servidores fique disponível.
-
-Existe uma lista de [add-on/plugins](https://kubernetes.io/docs/concepts/cluster-administration/addons/#networking-and-network-policy) disponíveis.
-
- ## **Plugin de Rede**
-
-Para esse exemplo vamos usar o [weave-net](https://www.weave.works/docs/net/latest/kubernetes/kube-addon/).
-
-```bash
-kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
-```
-
-Aguarde até que todos os pods de rede estejam rodando.
-
-![](/docs/images/img3.jpg)
-
-Verifique se todos os servidores do cluster estão disponíveis.
-
-![](/docs/images/img4.jpg)
-
-
-# **Conclusão**
-
-Esse projeto tem como objetivo fazer a instalação e configuração do cluster kubernetes com 3 servidores,
-1 master e 2 workers.
-
-![](/docs/images/img5.jpg)
+![playbook_cluster](/docs/images/playbook_cluster_1.png)

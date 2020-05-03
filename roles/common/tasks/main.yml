@@ -92,7 +92,6 @@
     - name: Desabilitando a swap
       shell: >
         swapoff -a
-      when: ansible_swaptotal_mb > 0
 
     - name: Desabilitando o SELinux
       selinux:
