@@ -84,7 +84,14 @@ Instalação e configuração do cluster kubernetes.
 
 #### **Cluster - Master Tasks**
 
-- [x] 
+- [x] Resetando o Cluster Master Node
+- [x] Inicializando o Cluster Kubernetes
+- [x] Garantindo que o diretório .kube existe
+- [x] Criando link da configuração do kubernetes
+- [x] Configurando a rede com o Weavenet
+- [x] Token do Cluster
+- [x] CA Hash
+- [x] Adicionando token do cluster kubernetes aos Dummy Hosts
 
 #### **Cluster - Worker Tasks**
 
