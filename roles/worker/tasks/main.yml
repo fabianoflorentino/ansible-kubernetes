@@ -2,7 +2,7 @@
   shell: kubeadm reset --force
   register: kubeadm_worker
 
-- name: "Kubeadmn join"
+- name: Adicionando Workers ao Cluster
   shell: >
     kubeadm join --token={{ hostvars['K8S_TOKEN_HOLDER']['token'] }} \
     --discovery-token-ca-cert-hash sha256:{{ hostvars['K8S_TOKEN_HOLDER']['hash'] }} \
