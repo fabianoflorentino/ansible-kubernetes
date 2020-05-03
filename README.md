@@ -33,9 +33,9 @@ vim ./inventories/<SEU INVENTARIO>/inventory.ini
 
 ```shell
 [all]
-master	ansible_host=1.2.3.4
-worker	ansible_host=1.2.3.4
-worker	ansible_host=1.2.3.4
+master  ansible_host=1.2.3.4
+worker  ansible_host=1.2.3.4
+worker  ansible_host=1.2.3.4
 
 [master]
 master
@@ -100,69 +100,69 @@ Instalação e configuração do cluster kubernetes.
 #### **Cluster - Common Tasks**
 
 - [x] Verificando Pré Requísitos
-	- Verifica os pré requisítos do sistema operacional para configurar o cluster
+  - Verifica os pré requisítos do sistema operacional para configurar o cluster
 - [x] Atualizando o Sistema
-	- Atualiza o sistema operacional
+  - Atualiza o sistema operacional
 - [x] Verificando se o repositório Docker existe
-	- Verifica se o repositório do Docker já existe no sistema
+  - Verifica se o repositório do Docker já existe no sistema
 - [x] Habilitando o Repositório do Docker
-	- Adiciona o repositório do Docker ao sistema
+  - Adiciona o repositório do Docker ao sistema
 - [x] Verificando se o repositório Kubernetes existe
-	- Verifica se o repositório do Kubernetes já existe no sistema
+  - Verifica se o repositório do Kubernetes já existe no sistema
 - [x] Habilitando o Repositório do Kubernetes
-	- Adiciona o repositório do Kubernetes ao sistema
+  - Adiciona o repositório do Kubernetes ao sistema
 - [x] Instalando pacotes essenciais
-	- Instala os pacotes essenciais ao sistema operacional e a configuração do cluster
+  - Instala os pacotes essenciais ao sistema operacional e a configuração do cluster
 - [x] Pip
-	- Módulos para o bom funcionamento do ansible
+  - Módulos para o bom funcionamento do ansible
 - [x] Configurando Serviço NTP
-	- Instalação e configuração do serviço NTP do sistema operacional
+  - Instalação e configuração do serviço NTP do sistema operacional
 - [x] Habilitando os Serviços
-	- Habilita os serviços essenciais para o bom funcionamento do sistema operacional e do cluster
+  - Habilita os serviços essenciais para o bom funcionamento do sistema operacional e do cluster
 - [x] Desabilitando os Serviços
-	- Desabilita serviços não essenciais para o sistema operacional
+  - Desabilita serviços não essenciais para o sistema operacional
 - [x] Removendo swapfile do /etc/fstab
-	- Removendo a swap do arquivo fstab
+  - Removendo a swap do arquivo fstab
 - [x] Desabilitando a swap
-	- Remove e desabilita a SWAP do sistema operacional
+  - Remove e desabilita a SWAP do sistema operacional
 - [x] Desabilitando o SELinux
-	- Desabilita o SELinux
+  - Desabilita o SELinux
 - [x] Atualizando o hostname do servidor
-	- Atualiza o hostname dos servidores conforme configurado no inventário
+  - Atualiza o hostname dos servidores conforme configurado no inventário
 - [x] Configurando o arquivo hosts dos servidores
-	- Adiciona entrada dos servidores no arquivo hosts
+  - Adiciona entrada dos servidores no arquivo hosts
 - [x] Configurando módulos do kernel
-	- Habilita módulos do kernel para o bom funcionamento do cluster kubernetes
+  - Habilita módulos do kernel para o bom funcionamento do cluster kubernetes
 - [x] Parametros de Rede para o Kernel
-	- Adiciona parametros ao kernel para o bom funcionamento do cluster kubernetes
+  - Adiciona parametros ao kernel para o bom funcionamento do cluster kubernetes
 - [x] Aplicando os parametros de Rede para o Kernel
-	- Aplica os parametros de rede para o kernel do sistema operacional
+  - Aplica os parametros de rede para o kernel do sistema operacional
 
 #### **Cluster - Master Tasks**
 
 - [x] Resetando o Cluster Master Node
-	- Reseta o cluster caso ele esteja iniciando previamente
+  - Reseta o cluster caso ele esteja iniciando previamente
 - [x] Inicializando o Cluster Kubernetes
-	- Inicializa o cluster com o kubeadm
+  - Inicializa o cluster com o kubeadm
 - [x] Garantindo que o diretório .kube existe
-	- Configura o diretório .kube no home do usuário
+  - Configura o diretório .kube no home do usuário
 - [x] Criando link da configuração do kubernetes
-	- Cria um link simbólico da configuração de acesso ao cluster pelo kubectl
+  - Cria um link simbólico da configuração de acesso ao cluster pelo kubectl
 - [x] Configurando a rede com o Weavenet
-	- Configura o plugin de rede Weavenet
+  - Configura o plugin de rede Weavenet
 - [x] Token do Cluster
-	- Lista o Token do cluster gerado na inicialização do cluster
+  - Lista o Token do cluster gerado na inicialização do cluster
 - [x] CA Hash
-	- Hash do arquivo da CA do cluster gerado na inicialização do cluster
+  - Hash do arquivo da CA do cluster gerado na inicialização do cluster
 - [x] Adicionando token do cluster kubernetes aos Dummy Hosts
-	- Armazenando as informações de token e hash em variáveis para adicionar os nodes workers ao cluster
+  - Armazenando as informações de token e hash em variáveis para adicionar os nodes workers ao cluster
 
 #### **Cluster - Worker Tasks**
 
 - [x] Resetando o Cluster Worker Node
-	- Reseta o cluster caso ele esteja iniciando previamente
+  - Reseta o cluster caso ele esteja iniciando previamente
 - [x] Adicionando Workers ao Cluster
-	- Adiciona os nodes workers ao cluster kubernetes com kubeadm
+  - Adiciona os nodes workers ao cluster kubernetes com kubeadm
 
 #### **Cluster - Variáveis Common**
 
