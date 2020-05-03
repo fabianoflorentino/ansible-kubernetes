@@ -263,3 +263,82 @@ ansible-playbook -i inventory/<SEU INVENTARIO>/inventory.ini -u ansible -b clust
 ![playbook_cluster](/docs/images/playbook_cluster_0.png)
 
 ![playbook_cluster](/docs/images/playbook_cluster_1.png)
+
+### **Metric Server**
+
+Instalação e configuração do servidor de métricas para o cluster kubernetes
+
+**Role:** [./roles/metric_server](./roles/metric_server)
+
+#### **Metric Server - Tasks**
+
+- [x] Diretórios para os arquivos YAML para deploy
+  - Diretórios para armazenar os arquivos YAML de instalação do servidor de métricas
+- [x] Copiando os arquivos YAML para o diretório criado
+  - Copia os arquivos YAML's para o diretório criado para deploy do servidor de métricas
+- [x] Deploy Metric Server
+  - Instala e configura o servidor de métricas
+
+#### **Metric Server - Variáveis**
+
+| Variável | Descrição |
+| :--- | :--- |
+| N/A | N/A |
+
+#### **Metric Server - Uso**
+
+Para instalar e configurar o servidor de métricas execute
+
+```shell
+ansible-playbook -i inventory/<SEU INVENTARIO>/inventory.ini -u ansible -b metric-server.yml
+```
+
+![metric_server_0](/docs/images/metric_server_0.png)
+
+### **Helm**
+
+Instalação e configuração do gerenciados de aplicativos Helm
+
+**Role:** [./roles/helm](./roles/helm)
+
+#### **Helm - Tasks**
+
+- [x] Verificando se o Helm já foi instalado
+  - Verifica se o Helm já está instalado no servidor
+- [x] Baixando o Helm
+  - Baixa o script de instalação do Helm
+- [x] Instalando Helm
+  - Instala o Helm
+
+#### **Helm - Variáveis**
+
+| Variável | Descrição |
+| :--- | :--- |
+| helm_url | URL do repositório do Helm |
+| helm_url_repo | URL para os repositórios de aplicativos do Helm |
+
+```yaml
+---
+helm_url: "https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3"
+helm_url_repo: https://kubernetes-charts.storage.googleapis.com
+```
+
+#### **Helm - Prometheus Operator***
+
+| Variável | Descrição |
+| :--- | :--- |
+| prometheus_operator | Parametros para instalação do Prometheus Operator |
+
+```yaml
+prometheus_operator: "--set prometheusOperator.createCustomResource=false prometheus-operator stable/prometheus-operator"
+```
+
+#### **Helm - Uso**
+
+Para instalar e configurar o servidor de métricas execute
+
+```shell
+ansible-playbook -i inventory/<SEU INVENTARIO>/inventory.ini -u ansible -b helm.yml
+```
+
+![helm_0](/docs/images/helm_0.png)

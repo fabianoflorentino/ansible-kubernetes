@@ -1,5 +1,5 @@
 ---
-- name: Directory to YAML files for Metric Server
+- name: Diretórios para os arquivos YAML para deploy
   file:
     path: "{{ item }}" 
     state: directory
@@ -7,7 +7,7 @@
     - "/tmp/metrics-server"
     - "/tmp/metrics-server/deploy"
     
-- name: Copy YAML files for Metric Server
+- name: Copiando os arquivos YAML para o diretório criado
   copy:
     src: "{{ item }}"
     dest: "/tmp/metrics-server/deploy/{{ item }}"
