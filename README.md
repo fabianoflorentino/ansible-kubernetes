@@ -254,7 +254,7 @@ k8s_api_secure_port: 6443
 
 #### **Cluster - Uso**
 
-Com o inventário confirado execute
+Com o ssh e o inventário confirado execute
 
 ```shell
 ansible-playbook -i inventory/<SEU INVENTARIO>/inventory.ini -u ansible -b cluster.yml
