@@ -1,5 +1,5 @@
 ---
-- name: Kubernetes Master
+- name: Kubernetes Master Nodes
   hosts:
     - master
   pre_tasks:
@@ -13,7 +13,7 @@
     - {role: common, tags: 'common'}
     - {role: master,  tags: 'master'}
 
-- name: Kubernetes Workers
+- name: Kubernetes Worker Nodes
   hosts:
     - workers
   pre_tasks:
@@ -28,7 +28,7 @@
     - {role: worker, tags: 'worker'}
 
 
-- name: Adicionando Label nos Node Workers
+- name: Adicionando Label nos Worker Nodes
   hosts:
     - master
   pre_tasks:

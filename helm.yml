@@ -1,4 +1,4 @@
-- name: Kubernetes Master
+- name: Kubernetes Master Nodes
   hosts:
     - master
   pre_tasks:

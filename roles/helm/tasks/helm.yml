@@ -26,7 +26,3 @@
       debug:
         var: helm_installed
   when: (which_helm.stat.exists != true)
-
-- name: Helm Applications
-  block:
-    - include: prometheus_operator.yml

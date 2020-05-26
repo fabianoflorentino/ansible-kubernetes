@@ -1,0 +1,8 @@
+---
+- name: Helm
+  block:
+    - include: helm.yml
+
+- name: Helm Applications
+  block:
+    - include: prometheus_operator.yml
